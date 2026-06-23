@@ -1,95 +1,65 @@
 # software-testing-final
 
-本 Maven 工程用于“高级软件测试技术”期末作业，集中管理被测方法、缺陷版本、JUnit 测试用例、覆盖率报告和实验截图。
+本 Maven 工程用于“高级软件测试技术”期末作业，集中管理被测方法源码、缺陷版本、JUnit 5 测试用例、JaCoCo 覆盖率报告、CFG 图、测试矩阵和实验截图。
+
+当前工程已经完成任务 1 至任务 4，以及不同测试方法的覆盖率和缺陷发现结果比较。
 
 ## 目录结构
 
 ```text
-）software-testing-final/
-|-- pom.xml                         Maven 工程配置，管理 JUnit 5、JaCoCo 和测试分组 profile
-|-- README.md                       工程说明文档，记录目录用途、运行命令和后续补充内容
+software-testing-final/
+|-- pom.xml                                      Maven 工程配置，管理 JUnit 5、JaCoCo 和测试分组 profile
+|-- README.md                                    工程说明文档
 |-- src/
 |   |-- main/
 |   |   |-- java/
 |   |   |   |-- sut/
-|   |   |   |   |-- CollectionsUnderTest.java          正确版本被测类
+|   |   |   |   |-- CollectionsUnderTest.java       正确版本被测类，本地化 OpenJDK Collections 源码
 |   |   |   |   |-- faulty/
-|   |   |   |   |   |-- FaultyReplaceAll.java             replaceAll 的单缺陷版本
-|   |   |   |   |   |-- FaultyIndexOfSubList.java         indexOfSubList 的单缺陷版本
-|   |   |   |   |   |-- FaultyDisjoint.java               disjoint 的单缺陷版本
+|   |   |   |   |   |-- FaultyReplaceAll.java          replaceAll 的单缺陷版本
+|   |   |   |   |   |-- FaultyIndexOfSubList.java      indexOfSubList 的单缺陷版本
+|   |   |   |   |   |-- FaultyDisjoint.java            disjoint 的单缺陷版本
 |   |-- test/
 |   |   |-- java/
 |   |   |   |-- sanity/
-|   |   |   |   |-- SanityTest.java                   基线冒烟测试
+|   |   |   |   |-- SanityTest.java                正确版本基线冒烟测试
+|   |   |   |   |-- FaultySanityTest.java          三个 faulty 缺陷触发验证
 |   |   |   |-- domain/
-|   |   |   |   |-- DomainBasedTest.java              输入域划分测试
+|   |   |   |   |-- DomainBasedTest.java           任务 1：输入域划分 / 基本选择覆盖测试
 |   |   |   |-- graph/
-|   |   |   |   |-- GraphCoverageTest.java            CFG 与主路径覆盖测试
+|   |   |   |   |-- GraphCoverageTest.java         任务 2：CFG / 主路径覆盖测试
 |   |   |   |-- logic/
-|   |   |   |   |-- LogicCoverageTest.java            谓词覆盖与 CACC 测试
+|   |   |   |   |-- LogicCoverageTest.java         任务 3：谓词覆盖 / CACC 测试
 |   |   |   |-- ai/
-|   |   |   |   |-- AIGeneratedCollectionsTest.java   AI 生成测试
-|   |   |-- resources/                 测试资源目录，后续可放测试数据或配置文件
+|   |   |   |   |-- AIGeneratedCollectionsTest.java 任务 4：AI 辅助测试
+|   |   |   |-- comparison/
+|   |   |   |   |-- DefectDiscoveryComparisonTest.java 不同测试方法缺陷发现证据测试
+|   |   |-- resources/
 |-- report/
-|   |-- cfg/                         保存三个方法的控制流图
-|   |-- screenshots/                 保存测试运行、覆盖率和缺陷暴露截图
-|   |-- jacoco-domain/               保存输入域划分测试的 JaCoCo 报告
-|   |-- jacoco-graph/                保存图覆盖测试的 JaCoCo 报告
-|   |-- jacoco-logic/                保存逻辑覆盖测试的 JaCoCo 报告
-|   |-- jacoco-ai/                   保存 AI 生成测试的 JaCoCo 报告
-|   |-- matrices/                    保存覆盖率比较表和缺陷发现矩阵
-|   |-- ai/                          保存 AI 提示词、原始输出和人工修正记录
-|-- target/                         编译和测试产生的临时输出目录（最后可删除）
-|   |-- classes/                     Java 主源码编译后的 .class 文件
-|   |-- smoke/                       临时冒烟验证程序的编译输出
+|   |-- ai/                                      AI 提示词、原始输出和人工修正记录
+|   |-- cfg/                                     CFG 设计说明、DOT 源文件和 CFG 图片
+|   |-- screenshots/                             测试运行、覆盖率和缺陷发现截图
+|   |-- jacoco-domain/                           输入域测试 JaCoCo 报告
+|   |-- jacoco-graph/                            图覆盖测试 JaCoCo 报告
+|   |-- jacoco-logic/                            逻辑覆盖测试 JaCoCo 报告
+|   |-- jacoco-ai/                               AI 测试 JaCoCo 报告
+|   |-- matrices/                                测试设计矩阵、缺陷验证表和结果比较表
+|-- target/                                      Maven 编译和测试输出目录，不需要提交
 ```
 
-## 代码文件说明
+## 被测方法与源码来源
 
-1. `src/main/java/sut/CollectionsUnderTest.java`
+本次作业选择 `java.util.Collections` 中的三个静态方法作为被测对象：
 
-   - 正确版本的被测类，统一放置本次作业选择的三个标准方法：`replaceAll`、`indexOfSubList`、`disjoint`。
-   - 当前已经使用作业 PDF 指定的 OpenJDK 源码链接完成本地化，不再委托调用 `java.util.Collections`。
-   - 后续 JaCoCo 可以直接统计这三个方法内部的行覆盖率和分支覆盖率。
-2. `src/main/java/sut/faulty/FaultyReplaceAll.java`
+1. `replaceAll(List<T> list, T oldVal, T newVal)`
+2. `indexOfSubList(List<?> source, List<?> target)`
+3. `disjoint(Collection<?> c1, Collection<?> c2)`
 
-   - `replaceAll` 的缺陷版本。
-   - 当前缺陷点是破坏 `oldVal == null` 时的空值处理逻辑，使用 `oldVal.equals(...)` 会在 `oldVal` 为 `null` 时触发异常。
-   - 后续用于验证输入域测试和逻辑覆盖测试是否能发现空值相关缺陷。
-3. `src/main/java/sut/faulty/FaultyIndexOfSubList.java`
+正确版本源码放在：
 
-   - `indexOfSubList` 的缺陷版本。
-   - 当前缺陷点是候选起点循环使用 `candidate < maxCandidate`，漏掉 `candidate == maxCandidate` 的最后一个合法位置。
-   - 后续用于验证测试集是否覆盖“target 正好出现在 source 末尾”的边界场景。
-4. `src/main/java/sut/faulty/FaultyDisjoint.java`
-
-   - `disjoint` 的缺陷版本。
-   - 当前缺陷点是发现公共元素时仍返回 `true`，把“有交集”的判断结果写反。
-   - 后续用于验证测试集是否覆盖两个集合存在公共元素的失败场景。
-5. `src/test/java/sanity/SanityTest.java`
-
-   - 基线冒烟测试，用于确认正确版本的三个方法具备基本行为。
-   - 该测试不属于正式覆盖准则分析，主要用于快速发现工程配置或基本实现错误。
-6. `src/test/java/domain/DomainBasedTest.java`
-
-   - 输入域划分测试类。
-   - 后续按照基本选择覆盖补全 `replaceAll`、`indexOfSubList`、`disjoint` 的输入域区块、基本值和边界值用例。
-7. `src/test/java/graph/GraphCoverageTest.java`
-
-   - 图覆盖测试类。
-   - 后续根据三个方法的 CFG、节点含义、边集合和主路径需求补全测试用例。
-8. `src/test/java/logic/LogicCoverageTest.java`
-
-   - 逻辑覆盖测试类。
-   - 后续根据谓词覆盖、子句覆盖和相关性有效子句覆盖（CACC）补全测试用例。
-9. `src/test/java/ai/AIGeneratedCollectionsTest.java`
-
-   - AI 生成测试类。
-   - 后续用于保存 AI 生成或经最小修正后的 JUnit 测试，并与人工设计测试集分开统计覆盖率和缺陷发现情况。
-
-## 当前状态
-
-`CollectionsUnderTest` 已经将 `replaceAll`、`indexOfSubList`、`disjoint` 三个方法复制为本地源码实现，便于后续用 JaCoCo 统计被测源码的行覆盖率和分支覆盖率。
+```text
+src/main/java/sut/CollectionsUnderTest.java
+```
 
 源码来源信息：
 
@@ -101,13 +71,73 @@
 6. 下载日期：`2026-06-22`
 7. commit：`2e179fec7b5113a3b526ee4ad5c66d6b7f0179e2`
 
-`sut.faulty` 包下的三个类分别对应一个植入缺陷。每个缺陷单独放在一个类中，便于后续分别运行测试并比较不同测试集的缺陷发现能力。
+将标准类源码复制到本地 SUT 的目的，是让 JaCoCo 能统计三个被测方法内部的行覆盖率、分支覆盖率和指令覆盖率。
 
-## 生成目录说明
+## 缺陷版本说明
 
-`target/` 是 `javac`、Maven 或临时测试验证过程自动生成的输出目录，不是需要手工维护的源码目录。当前 `target/classes` 保存主源码编译后的 `.class` 文件，`target/smoke` 保存临时冒烟验证程序的编译输出。
+1. `FaultyReplaceAll`
 
-如果需要重新验证工程，可以删除 `target/` 后重新编译或运行测试。正式提交作业时，重点材料仍然是 `src/`、`pom.xml`、`README.md` 和 `report/` 下的实验材料。
+   - 对应方法：`replaceAll`
+   - 缺陷类型：空值处理缺陷
+   - 植入方式：使用 `oldVal.equals(...)` 判断元素是否匹配
+   - 缺陷影响：当 `oldVal == null` 时触发 `NullPointerException`
+
+2. `FaultyIndexOfSubList`
+
+   - 对应方法：`indexOfSubList`
+   - 缺陷类型：边界错误 / off-by-one
+   - 植入方式：候选起点循环漏掉 `candidate == maxCandidate`
+   - 缺陷影响：当 `target` 正好出现在 `source` 末尾时错误返回 `-1`
+
+3. `FaultyDisjoint`
+
+   - 对应方法：`disjoint`
+   - 缺陷类型：逻辑判断错误
+   - 植入方式：发现公共元素时返回 `true`
+   - 缺陷影响：两个集合存在公共元素时仍被错误判断为不相交
+
+## 测试集与运行结果
+
+1. 基线与缺陷触发验证
+
+   - `SanityTest`：正确版本基线冒烟测试
+   - `FaultySanityTest`：验证 F1、F2、F3 均可被关键输入触发
+   - `FaultySanityTest` 结果：`Tests run: 4, Failures: 0, Errors: 0, Skipped: 0`
+
+2. 任务 1：输入域划分测试
+
+   - 测试类：`DomainBasedTest`
+   - 测试数量：`34`
+   - JaCoCo 报告：`report/jacoco-domain/`
+   - 覆盖率：指令 `90%`，分支 `80%`，行覆盖 `56/61`，方法覆盖 `4/4`
+
+3. 任务 2：图覆盖测试
+
+   - 测试类：`GraphCoverageTest`
+   - 测试数量：`24`
+   - JaCoCo 报告：`report/jacoco-graph/`
+   - 覆盖率：指令 `96%`，分支 `88%`，行覆盖 `61/61`，方法覆盖 `4/4`
+
+4. 任务 3：逻辑覆盖测试
+
+   - 测试类：`LogicCoverageTest`
+   - 测试数量：`28`
+   - JaCoCo 报告：`report/jacoco-logic/`
+   - 覆盖率：指令 `100%`，分支 `98%`，行覆盖 `61/61`，方法覆盖 `4/4`
+
+5. 任务 4：AI 辅助测试
+
+   - 测试类：`AIGeneratedCollectionsTest`
+   - 测试数量：`20`
+   - JaCoCo 报告：`report/jacoco-ai/`
+   - 覆盖率：指令 `73%`，分支 `64%`，行覆盖 `46/61`，方法覆盖 `4/4`
+
+6. 不同测试方法缺陷发现比较
+
+   - 测试类：`DefectDiscoveryComparisonTest`
+   - 测试数量：`12`
+   - 运行结果：`Tests run: 12, Failures: 0, Errors: 0, Skipped: 0`
+   - 结论：输入域测试、图覆盖测试、逻辑覆盖测试和 AI 辅助测试均能发现 F1、F2、F3
 
 ## 常用命令
 
@@ -117,32 +147,62 @@
 mvn test
 ```
 
-按测试设计方法单独运行并导出 JaCoCo 报告：
+运行缺陷触发验证：
 
 ```powershell
-mvn -Pdomain test jacoco:report
-mvn -Pgraph test jacoco:report
-mvn -Plogic test jacoco:report
-mvn -Pai test jacoco:report
+mvn "-Dtest=sanity.FaultySanityTest" test
 ```
 
-## 报告材料
+按任务分组运行并导出 JaCoCo 报告：
+
+```powershell
+mvn -Pdomain clean test jacoco:report
+mvn -Pgraph clean test jacoco:report
+mvn -Plogic clean test jacoco:report
+mvn -Pai clean test jacoco:report
+```
+
+运行不同测试方法缺陷发现比较：
+
+```powershell
+mvn "-Dtest=comparison.DefectDiscoveryComparisonTest" test
+```
+
+生成 CFG 图片：
+
+```powershell
+dot -Tpng report\cfg\replaceAll-cfg.dot -o report\cfg\replaceAll-cfg.png
+dot -Tpng report\cfg\indexOfSubList-cfg.dot -o report\cfg\indexOfSubList-cfg.png
+dot -Tpng report\cfg\disjoint-cfg.dot -o report\cfg\disjoint-cfg.png
+```
+
+## 报告材料说明
 
 1. `report/cfg`
 
-   - 保存 `replaceAll`、`indexOfSubList`、`disjoint` 的控制流图。
-   - 图中节点编号应与报告中的主路径表保持一致。
+   - 保存三个方法的 CFG 设计说明、Graphviz DOT 源文件和 PNG 图片。
+
 2. `report/screenshots`
 
-   - 保存 `mvn test`、各分组测试运行结果、JaCoCo 页面和缺陷暴露断言信息截图。
+   - 保存阶段 2 至阶段 8 的测试运行截图、覆盖率截图和缺陷发现比较截图。
+
 3. `report/jacoco-domain`、`report/jacoco-graph`、`report/jacoco-logic`、`report/jacoco-ai`
 
-   - 分别保存输入域划分、图覆盖、逻辑覆盖、AI 测试四类测试集的覆盖率报告。
-   - 后续报告中应分别引用这些结果，而不是只使用一次总覆盖率。
+   - 分别保存四类测试集的 JaCoCo HTML、XML 和 CSV 报告。
+
 4. `report/matrices`
 
-   - 保存覆盖率比较表和缺陷发现矩阵。
-   - 建议记录每类测试集的用例数量、行覆盖率、分支覆盖率、方法覆盖率和发现的缺陷编号。
+   - `domain-input-domain.md`：任务 1 输入域划分设计矩阵
+   - `graph-coverage-design.md`：任务 2 图覆盖测试矩阵
+   - `logic-coverage-design.md`：任务 3 逻辑覆盖测试矩阵
+   - `ai-generated-test-design.md`：任务 4 AI 测试设计矩阵
+   - `faulty-sanity-verification.md`：缺陷植入有效性验证表
+   - `result-comparison.md`：覆盖率和缺陷发现结果比较表
+
 5. `report/ai`
 
-   - 保存 AI 测试使用的提示词、AI 原始输出、首次运行问题和人工修正记录。
+   - 保存 AI 提示词、AI 原始输出和人工审查修正记录。
+
+## 提交说明
+
+根目录 `.gitignore` 已排除课程要求 PDF、作业方案 DOCX、个人最终报告 Markdown、本地构建目录 `target/` 和本地工具状态目录。仓库提交内容以 Maven 工程、源码、测试代码和实验材料为主。
