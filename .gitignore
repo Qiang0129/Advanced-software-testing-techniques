@@ -1,0 +1,30 @@
+# Course source documents not needed for repository submission
+高级软件测试技术期末作业完成方案 (1).docx
+2026春季期末考查.pdf
+最终报告.md
+
+# Local build outputs
+**/target/
+*.class
+
+# Maven / JaCoCo transient runtime files
+*.exec
+
+# IDE and editor metadata
+.idea/
+.vscode/
+*.iml
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary Office files
+~$*.docx
+~$*.xlsx
+~$*.pptx
+
+# Local agent/tooling state
+.agents/
+.codex/

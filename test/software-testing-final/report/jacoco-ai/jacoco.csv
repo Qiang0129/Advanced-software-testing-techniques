@@ -1,0 +1,5 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+software-testing-final,sut,CollectionsUnderTest,65,181,22,40,15,46,14,21,0,4
+software-testing-final,sut.faulty,FaultyDisjoint,18,0,4,0,5,0,3,0,1,0
+software-testing-final,sut.faulty,FaultyIndexOfSubList,54,0,12,0,16,0,7,0,1,0
+software-testing-final,sut.faulty,FaultyReplaceAll,25,0,4,0,6,0,3,0,1,0

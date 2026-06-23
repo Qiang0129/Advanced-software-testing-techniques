@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CollectionsUnderTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">software-testing-final</a> &gt; <a href="index.source.html" class="el_package">sut</a> &gt; <span class="el_source">CollectionsUnderTest.java</span></div><h1>CollectionsUnderTest.java</h1><pre class="source lang-java linenums">package sut;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.RandomAccess;
+import java.util.Set;
+
+/**
+ * 正确版本的被测类。
+ *
+ * &lt;p&gt;源码来源：OpenJDK jdk/master，
+ * src/java.base/share/classes/java/util/Collections.java。
+ * 下载日期：2026-06-22。
+ * commit：2e179fec7b5113a3b526ee4ad5c66d6b7f0179e2。
+ */
+public final class CollectionsUnderTest {
+    private static final int REPLACEALL_THRESHOLD = 11;
+    private static final int INDEXOFSUBLIST_THRESHOLD = 35;
+
+    private CollectionsUnderTest() {
+    }
+
+    /**
+     * 将列表中所有等于 oldVal 的元素替换为 newVal。
+     *
+     * @param list 要修改的列表
+     * @param oldVal 要替换的旧值，可为 null
+     * @param newVal 新值，可为 null
+     * @param &lt;T&gt; 列表元素类型
+     * @return 如果至少替换了一个元素，返回 true；否则返回 false
+     */
+    public static &lt;T&gt; boolean replaceAll(List&lt;T&gt; list, T oldVal, T newVal) {
+<span class="fc" id="L34">        boolean result = false;</span>
+<span class="fc" id="L35">        int size = list.size();</span>
+<span class="fc bfc" id="L36" title="All 4 branches covered.">        if (size &lt; REPLACEALL_THRESHOLD || list instanceof RandomAccess) {</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">            if (oldVal == null) {</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">                for (int i = 0; i &lt; size; i++) {</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">                    if (list.get(i) == null) {</span>
+<span class="fc" id="L40">                        list.set(i, newVal);</span>
+<span class="fc" id="L41">                        result = true;</span>
+                    }
+                }
+            } else {
+<span class="fc bfc" id="L45" title="All 2 branches covered.">                for (int i = 0; i &lt; size; i++) {</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">                    if (oldVal.equals(list.get(i))) {</span>
+<span class="fc" id="L47">                        list.set(i, newVal);</span>
+<span class="fc" id="L48">                        result = true;</span>
+                    }
+                }
+            }
+        } else {
+<span class="fc" id="L53">            ListIterator&lt;T&gt; itr = list.listIterator();</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">            if (oldVal == null) {</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">                for (int i = 0; i &lt; size; i++) {</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">                    if (itr.next() == null) {</span>
+<span class="fc" id="L57">                        itr.set(newVal);</span>
+<span class="fc" id="L58">                        result = true;</span>
+                    }
+                }
+            } else {
+<span class="fc bfc" id="L62" title="All 2 branches covered.">                for (int i = 0; i &lt; size; i++) {</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">                    if (oldVal.equals(itr.next())) {</span>
+<span class="fc" id="L64">                        itr.set(newVal);</span>
+<span class="fc" id="L65">                        result = true;</span>
+                    }
+                }
+            }
+        }
+<span class="fc" id="L70">        return result;</span>
+    }
+
+    /**
+     * 查找 target 在 source 中第一次完整出现的起始位置。
+     *
+     * @param source 源列表
+     * @param target 目标子列表
+     * @return target 首次出现的索引；若不存在返回 -1；若 target 为空返回 0
+     */
+    public static int indexOfSubList(List&lt;?&gt; source, List&lt;?&gt; target) {
+<span class="fc" id="L81">        int sourceSize = source.size();</span>
+<span class="fc" id="L82">        int targetSize = target.size();</span>
+<span class="fc" id="L83">        int maxCandidate = sourceSize - targetSize;</span>
+
+<span class="pc bpc" id="L85" title="3 of 6 branches missed.">        if (sourceSize &lt; INDEXOFSUBLIST_THRESHOLD ||</span>
+                (source instanceof RandomAccess &amp;&amp; target instanceof RandomAccess)) {
+        nextCand:
+<span class="fc bfc" id="L88" title="All 2 branches covered.">            for (int candidate = 0; candidate &lt;= maxCandidate; candidate++) {</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">                for (int i = 0, j = candidate; i &lt; targetSize; i++, j++) {</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">                    if (!eq(target.get(i), source.get(j))) {</span>
+<span class="fc" id="L91">                        continue nextCand;</span>
+                    }
+                }
+<span class="fc" id="L94">                return candidate;</span>
+            }
+        } else {
+<span class="fc" id="L97">            ListIterator&lt;?&gt; si = source.listIterator();</span>
+        nextCand:
+<span class="fc bfc" id="L99" title="All 2 branches covered.">            for (int candidate = 0; candidate &lt;= maxCandidate; candidate++) {</span>
+<span class="fc" id="L100">                ListIterator&lt;?&gt; ti = target.listIterator();</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">                for (int i = 0; i &lt; targetSize; i++) {</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">                    if (!eq(ti.next(), si.next())) {</span>
+                        // 将 source 迭代器退回到下一个候选起点。
+<span class="fc bfc" id="L104" title="All 2 branches covered.">                        for (int j = 0; j &lt; i; j++) {</span>
+<span class="fc" id="L105">                            si.previous();</span>
+                        }
+<span class="fc" id="L107">                        continue nextCand;</span>
+                    }
+                }
+<span class="fc" id="L110">                return candidate;</span>
+            }
+        }
+<span class="fc" id="L113">        return -1;</span>
+    }
+
+    /**
+     * 判断两个集合是否没有公共元素。
+     *
+     * @param c1 第一个集合
+     * @param c2 第二个集合
+     * @return 如果两个集合没有公共元素，返回 true；否则返回 false
+     */
+    public static boolean disjoint(Collection&lt;?&gt; c1, Collection&lt;?&gt; c2) {
+<span class="fc" id="L124">        Collection&lt;?&gt; contains = c2;</span>
+<span class="fc" id="L125">        Collection&lt;?&gt; iterate = c1;</span>
+
+        // 优先使用 contains() 复杂度更低的集合，并尽量迭代较小集合。
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (c1 instanceof Set) {</span>
+<span class="fc" id="L129">            iterate = c2;</span>
+<span class="fc" id="L130">            contains = c1;</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        } else if (!(c2 instanceof Set)) {</span>
+<span class="fc" id="L132">            int c1size = c1.size();</span>
+<span class="fc" id="L133">            int c2size = c2.size();</span>
+<span class="fc bfc" id="L134" title="All 4 branches covered.">            if (c1size == 0 || c2size == 0) {</span>
+<span class="fc" id="L135">                return true;</span>
+            }
+
+<span class="fc bfc" id="L138" title="All 2 branches covered.">            if (c1size &gt; c2size) {</span>
+<span class="fc" id="L139">                iterate = c2;</span>
+<span class="fc" id="L140">                contains = c1;</span>
+            }
+        }
+
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        for (Object e : iterate) {</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">            if (contains.contains(e)) {</span>
+<span class="fc" id="L146">                return false;</span>
+            }
+<span class="fc" id="L148">        }</span>
+
+<span class="fc" id="L150">        return true;</span>
+    }
+
+    private static boolean eq(Object o1, Object o2) {
+<span class="pc bpc" id="L154" title="3 of 4 branches missed.">        return o1 == null ? o2 == null : o1.equals(o2);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,53 @@
+digraph ReplaceAllCFG {
+    rankdir=TB;
+    node [shape=box, fontname="Arial"];
+    edge [fontname="Arial"];
+
+    RA_N1 [label="RA-N1\nStart: result=false, size=list.size()"];
+    RA_N2 [shape=diamond, label="RA-N2\nsize < 11 || RandomAccess"];
+    RA_N3 [shape=diamond, label="RA-N3\noldVal == null"];
+    RA_N4 [shape=diamond, label="RA-N4\nindex null loop"];
+    RA_N5 [shape=diamond, label="RA-N5\nlist.get(i) == null"];
+    RA_N6 [label="RA-N6\nlist.set(i, newVal)\nresult=true"];
+    RA_N7 [shape=diamond, label="RA-N7\nindex equals loop"];
+    RA_N8 [shape=diamond, label="RA-N8\noldVal.equals(list.get(i))"];
+    RA_N9 [label="RA-N9\nlist.set(i, newVal)\nresult=true"];
+    RA_N10 [label="RA-N10\nitr=list.listIterator()"];
+    RA_N11 [shape=diamond, label="RA-N11\noldVal == null"];
+    RA_N12 [shape=diamond, label="RA-N12\niterator null loop"];
+    RA_N13 [shape=diamond, label="RA-N13\nitr.next() == null"];
+    RA_N14 [label="RA-N14\nitr.set(newVal)\nresult=true"];
+    RA_N15 [shape=diamond, label="RA-N15\niterator equals loop"];
+    RA_N16 [shape=diamond, label="RA-N16\noldVal.equals(itr.next())"];
+    RA_N17 [label="RA-N17\nitr.set(newVal)\nresult=true"];
+    RA_N18 [shape=oval, label="RA-N18\nreturn result"];
+
+    RA_N1 -> RA_N2;
+    RA_N2 -> RA_N3 [label="T"];
+    RA_N2 -> RA_N10 [label="F"];
+    RA_N3 -> RA_N4 [label="T"];
+    RA_N3 -> RA_N7 [label="F"];
+    RA_N4 -> RA_N5 [label="T"];
+    RA_N4 -> RA_N18 [label="F"];
+    RA_N5 -> RA_N6 [label="T"];
+    RA_N5 -> RA_N4 [label="F"];
+    RA_N6 -> RA_N4;
+    RA_N7 -> RA_N8 [label="T"];
+    RA_N7 -> RA_N18 [label="F"];
+    RA_N8 -> RA_N9 [label="T"];
+    RA_N8 -> RA_N7 [label="F"];
+    RA_N9 -> RA_N7;
+    RA_N10 -> RA_N11;
+    RA_N11 -> RA_N12 [label="T"];
+    RA_N11 -> RA_N15 [label="F"];
+    RA_N12 -> RA_N13 [label="T"];
+    RA_N12 -> RA_N18 [label="F"];
+    RA_N13 -> RA_N14 [label="T"];
+    RA_N13 -> RA_N12 [label="F"];
+    RA_N14 -> RA_N12;
+    RA_N15 -> RA_N16 [label="T"];
+    RA_N15 -> RA_N18 [label="F"];
+    RA_N16 -> RA_N17 [label="T"];
+    RA_N16 -> RA_N15 [label="F"];
+    RA_N17 -> RA_N15;
+}

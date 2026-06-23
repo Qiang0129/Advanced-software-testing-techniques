@@ -1,0 +1,36 @@
+digraph DisjointCFG {
+    rankdir=TB;
+    node [shape=box, fontname="Arial"];
+    edge [fontname="Arial"];
+
+    DJ_N1 [label="DJ-N1\nStart: contains=c2, iterate=c1"];
+    DJ_N2 [shape=diamond, label="DJ-N2\nc1 instanceof Set"];
+    DJ_N3 [label="DJ-N3\niterate=c2\ncontains=c1"];
+    DJ_N4 [shape=diamond, label="DJ-N4\n!(c2 instanceof Set)"];
+    DJ_N5 [label="DJ-N5\nread c1size and c2size"];
+    DJ_N6 [shape=diamond, label="DJ-N6\nc1size == 0 || c2size == 0"];
+    DJ_N7 [shape=oval, label="DJ-N7\nreturn true"];
+    DJ_N8 [shape=diamond, label="DJ-N8\nc1size > c2size"];
+    DJ_N9 [label="DJ-N9\niterate=c2\ncontains=c1"];
+    DJ_N10 [shape=diamond, label="DJ-N10\nfor e in iterate"];
+    DJ_N11 [shape=diamond, label="DJ-N11\ncontains.contains(e)"];
+    DJ_N12 [shape=oval, label="DJ-N12\nreturn false"];
+    DJ_N13 [shape=oval, label="DJ-N13\nreturn true"];
+
+    DJ_N1 -> DJ_N2;
+    DJ_N2 -> DJ_N3 [label="T"];
+    DJ_N2 -> DJ_N4 [label="F"];
+    DJ_N3 -> DJ_N10;
+    DJ_N4 -> DJ_N5 [label="T"];
+    DJ_N4 -> DJ_N10 [label="F"];
+    DJ_N5 -> DJ_N6;
+    DJ_N6 -> DJ_N7 [label="T"];
+    DJ_N6 -> DJ_N8 [label="F"];
+    DJ_N8 -> DJ_N9 [label="T"];
+    DJ_N8 -> DJ_N10 [label="F"];
+    DJ_N9 -> DJ_N10;
+    DJ_N10 -> DJ_N11 [label="T"];
+    DJ_N10 -> DJ_N13 [label="F"];
+    DJ_N11 -> DJ_N12 [label="T"];
+    DJ_N11 -> DJ_N10 [label="F"];
+}

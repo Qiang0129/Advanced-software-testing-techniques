@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FaultyReplaceAll.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">software-testing-final</a> &gt; <a href="index.source.html" class="el_package">sut.faulty</a> &gt; <span class="el_source">FaultyReplaceAll.java</span></div><h1>FaultyReplaceAll.java</h1><pre class="source lang-java linenums">package sut.faulty;
+
+import java.util.List;
+
+/**
+ * replaceAll 的缺陷版本：故意破坏 oldVal 为 null 时的处理逻辑。
+ */
+public final class FaultyReplaceAll {
+    private FaultyReplaceAll() {
+    }
+
+    public static &lt;T&gt; boolean replaceAll(List&lt;T&gt; list, T oldVal, T newVal) {
+<span class="nc" id="L13">        boolean result = false;</span>
+<span class="nc bnc" id="L14" title="All 2 branches missed.">        for (int i = 0; i &lt; list.size(); i++) {</span>
+            // 缺陷点：oldVal 为 null 时会触发 NullPointerException。
+<span class="nc bnc" id="L16" title="All 2 branches missed.">            if (oldVal.equals(list.get(i))) {</span>
+<span class="nc" id="L17">                list.set(i, newVal);</span>
+<span class="nc" id="L18">                result = true;</span>
+            }
+        }
+<span class="nc" id="L21">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

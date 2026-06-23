@@ -1,0 +1,46 @@
+digraph IndexOfSubListCFG {
+    rankdir=TB;
+    node [shape=box, fontname="Arial"];
+    edge [fontname="Arial"];
+
+    IS_N1 [label="IS-N1\nStart: sizes and maxCandidate"];
+    IS_N2 [shape=diamond, label="IS-N2\nsourceSize < 35 || both RandomAccess"];
+    IS_N3 [shape=diamond, label="IS-N3\nrandom candidate loop"];
+    IS_N4 [shape=diamond, label="IS-N4\nrandom inner loop"];
+    IS_N5 [shape=diamond, label="IS-N5\n!eq(target[i], source[j])"];
+    IS_N6 [label="IS-N6\ncontinue nextCand"];
+    IS_N7 [shape=oval, label="IS-N7\nreturn candidate"];
+    IS_N8 [label="IS-N8\nsi=source.listIterator()"];
+    IS_N9 [shape=diamond, label="IS-N9\niterator candidate loop"];
+    IS_N10 [label="IS-N10\nti=target.listIterator()"];
+    IS_N11 [shape=diamond, label="IS-N11\niterator inner loop"];
+    IS_N12 [shape=diamond, label="IS-N12\n!eq(ti.next(), si.next())"];
+    IS_N13 [shape=diamond, label="IS-N13\nbacktrack loop j < i"];
+    IS_N14 [label="IS-N14\nsi.previous()"];
+    IS_N15 [label="IS-N15\ncontinue nextCand"];
+    IS_N16 [shape=oval, label="IS-N16\nreturn candidate"];
+    IS_N17 [shape=oval, label="IS-N17\nreturn -1"];
+
+    IS_N1 -> IS_N2;
+    IS_N2 -> IS_N3 [label="T"];
+    IS_N2 -> IS_N8 [label="F"];
+    IS_N3 -> IS_N4 [label="T"];
+    IS_N3 -> IS_N17 [label="F"];
+    IS_N4 -> IS_N5 [label="T"];
+    IS_N4 -> IS_N7 [label="F"];
+    IS_N5 -> IS_N6 [label="T"];
+    IS_N5 -> IS_N4 [label="F"];
+    IS_N6 -> IS_N3;
+    IS_N8 -> IS_N9;
+    IS_N9 -> IS_N10 [label="T"];
+    IS_N9 -> IS_N17 [label="F"];
+    IS_N10 -> IS_N11;
+    IS_N11 -> IS_N12 [label="T"];
+    IS_N11 -> IS_N16 [label="F"];
+    IS_N12 -> IS_N13 [label="T"];
+    IS_N12 -> IS_N11 [label="F"];
+    IS_N13 -> IS_N14 [label="T"];
+    IS_N13 -> IS_N15 [label="F"];
+    IS_N14 -> IS_N13;
+    IS_N15 -> IS_N9;
+}
