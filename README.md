@@ -1,7 +1,6 @@
+# 高级软件测试技术期末报告README
 
-# software-testing-final
-
-本 Maven 工程用于“高级软件测试技术”期末作业，集中管理被测方法源码、缺陷版本、JUnit 5 测试用例、JaCoCo 覆盖率报告、CFG 图、测试矩阵和实验截图。
+本 Maven 工程用于集中管理被测方法源码、缺陷版本、JUnit 5 测试用例、JaCoCo 覆盖率报告、CFG 图、测试矩阵和实验截图。（仓库地址：[https://github.com/Qiang0129/Advanced-software-testing-techniques）](https://github.com/Qiang0129/Advanced-software-testing-techniques%EF%BC%89)
 
 当前工程已经完成任务 1 至任务 4，以及不同测试方法的覆盖率和缺陷发现结果比较。
 
@@ -45,7 +44,7 @@ software-testing-final/
 |   |-- jacoco-logic/                            逻辑覆盖测试 JaCoCo 报告
 |   |-- jacoco-ai/                               AI 测试 JaCoCo 报告
 |   |-- matrices/                                测试设计矩阵、缺陷验证表和结果比较表
-|-- target/                                      Maven 编译和测试输出目录，不需要提交
+|-- target/                                      Maven 编译和测试输出目录
 ```
 
 ## 被测方法与源码来源
@@ -76,62 +75,23 @@ src/main/java/sut/CollectionsUnderTest.java
 
 ## 缺陷版本说明
 
-1. `FaultyReplaceAll`
-
-   - 对应方法：`replaceAll`
-   - 缺陷类型：空值处理缺陷
-   - 植入方式：使用 `oldVal.equals(...)` 判断元素是否匹配
-   - 缺陷影响：当 `oldVal == null` 时触发 `NullPointerException`
-2. `FaultyIndexOfSubList`
-
-   - 对应方法：`indexOfSubList`
-   - 缺陷类型：边界错误 / off-by-one
-   - 植入方式：候选起点循环漏掉 `candidate == maxCandidate`
-   - 缺陷影响：当 `target` 正好出现在 `source` 末尾时错误返回 `-1`
-3. `FaultyDisjoint`
-
-   - 对应方法：`disjoint`
-   - 缺陷类型：逻辑判断错误
-   - 植入方式：发现公共元素时返回 `true`
-   - 缺陷影响：两个集合存在公共元素时仍被错误判断为不相交
+| 缺陷类                   | 对应方法           | 缺陷类型              | 植入方式                                      | 缺陷影响                                                 |
+| ------------------------ | ------------------ | --------------------- | --------------------------------------------- | -------------------------------------------------------- |
+| `FaultyReplaceAll`     | `replaceAll`     | 空值处理缺陷          | 使用`oldVal.equals(...)` 判断元素是否匹配   | 当`oldVal == null` 时触发 `NullPointerException`     |
+| `FaultyIndexOfSubList` | `indexOfSubList` | 边界错误 / off-by-one | 候选起点循环漏掉`candidate == maxCandidate` | 当`target` 正好出现在 `source` 末尾时错误返回 `-1` |
+| `FaultyDisjoint`       | `disjoint`       | 逻辑判断错误          | 发现公共元素时返回`true`                    | 两个集合存在公共元素时仍被错误判断为不相交               |
 
 ## 测试集与运行结果
 
-1. 基线与缺陷触发验证
-
-   - `SanityTest`：正确版本基线冒烟测试
-   - `FaultySanityTest`：验证 F1、F2、F3 均可被关键输入触发
-   - `FaultySanityTest` 结果：`Tests run: 4, Failures: 0, Errors: 0, Skipped: 0`
-2. 任务 1：输入域划分测试
-
-   - 测试类：`DomainBasedTest`
-   - 测试数量：`34`
-   - JaCoCo 报告：`report/jacoco-domain/`
-   - 覆盖率：指令 `90%`，分支 `80%`，行覆盖 `56/61`，方法覆盖 `4/4`
-3. 任务 2：图覆盖测试
-
-   - 测试类：`GraphCoverageTest`
-   - 测试数量：`24`
-   - JaCoCo 报告：`report/jacoco-graph/`
-   - 覆盖率：指令 `96%`，分支 `88%`，行覆盖 `61/61`，方法覆盖 `4/4`
-4. 任务 3：逻辑覆盖测试
-
-   - 测试类：`LogicCoverageTest`
-   - 测试数量：`28`
-   - JaCoCo 报告：`report/jacoco-logic/`
-   - 覆盖率：指令 `100%`，分支 `98%`，行覆盖 `61/61`，方法覆盖 `4/4`
-5. 任务 4：AI 辅助测试
-
-   - 测试类：`AIGeneratedCollectionsTest`
-   - 测试数量：`20`
-   - JaCoCo 报告：`report/jacoco-ai/`
-   - 覆盖率：指令 `73%`，分支 `64%`，行覆盖 `46/61`，方法覆盖 `4/4`
-6. 不同测试方法缺陷发现比较
-
-   - 测试类：`DefectDiscoveryComparisonTest`
-   - 测试数量：`12`
-   - 运行结果：`Tests run: 12, Failures: 0, Errors: 0, Skipped: 0`
-   - 结论：输入域测试、图覆盖测试、逻辑覆盖测试和 AI 辅助测试均能发现 F1、F2、F3
+| 阶段                     | 测试类                            | 测试数量 | JaCoCo 报告               | 覆盖率                                                         | 运行结果                                                                                                         |
+| ------------------------ | --------------------------------- | -------- | ------------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| 基线与缺陷触发验证       | `SanityTest`                    | -        | -                         | -                                                              | 正确版本基线冒烟测试                                                                                             |
+| 基线与缺陷触发验证       | `FaultySanityTest`              | 4        | -                         | -                                                              | `Tests run: 4, Failures: 0, Errors: 0, Skipped: 0`，验证 F1、F2、F3 均可被关键输入触发                         |
+| 任务 1：输入域划分测试   | `DomainBasedTest`               | 34       | `report/jacoco-domain/` | 指令`90%`，分支 `80%`，行覆盖 `56/61`，方法覆盖 `4/4`  | -                                                                                                                |
+| 任务 2：图覆盖测试       | `GraphCoverageTest`             | 24       | `report/jacoco-graph/`  | 指令`96%`，分支 `88%`，行覆盖 `61/61`，方法覆盖 `4/4`  | -                                                                                                                |
+| 任务 3：逻辑覆盖测试     | `LogicCoverageTest`             | 28       | `report/jacoco-logic/`  | 指令`100%`，分支 `98%`，行覆盖 `61/61`，方法覆盖 `4/4` | -                                                                                                                |
+| 任务 4：AI 辅助测试      | `AIGeneratedCollectionsTest`    | 20       | `report/jacoco-ai/`     | 指令`73%`，分支 `64%`，行覆盖 `46/61`，方法覆盖 `4/4`  | -                                                                                                                |
+| 不同测试方法缺陷发现比较 | `DefectDiscoveryComparisonTest` | 12       | -                         | -                                                              | `Tests run: 12, Failures: 0, Errors: 0, Skipped: 0`，输入域、图覆盖、逻辑覆盖和 AI 辅助测试均能发现 F1、F2、F3 |
 
 ## 常用命令
 
@@ -193,6 +153,3 @@ dot -Tpng report\cfg\disjoint-cfg.dot -o report\cfg\disjoint-cfg.png
 
    - 保存 AI 提示词、AI 原始输出和人工审查修正记录。
 
-## 提交说明
-
-根目录 `.gitignore` 已排除课程要求 PDF、作业方案 DOCX、个人最终报告 Markdown、本地构建目录 `target/` 和本地工具状态目录。仓库提交内容以 Maven 工程、源码、测试代码和实验材料为主。
